@@ -1,0 +1,23 @@
+@model IEnumerable<ProductCatalogApp.Client.Models.ProductionSite>
+@{ ViewData["Title"] = "Мониторинг"; }
+<div id="monitoring" data-hub-url="@ViewData["HubUrl"]" data-access-token="@ViewData["AccessToken"]">
+<h1>Мониторинг датчиков</h1>
+<p><span id="status" class="badge bg-secondary">Подключение…</span> Подключений онлайн: <strong id="online">0</strong></p>
+<div id="error" class="alert alert-danger" role="alert" hidden></div>
+<label for="site" class="form-label">Участок</label>
+<select id="site" class="form-select mb-3"><option value="">Все участки</option>@foreach (var site in Model) { <option value="@site.Id">@site.Name</option> }</select>
+<div id="alarm" class="alert alert-warning" role="status" hidden></div>
+<h2 class="h4">Контрольный замер</h2>
+<form id="reading-form" class="row g-2 mb-4">
+<div class="col-md-4"><label for="sensor" class="form-label">Датчик</label><select id="sensor" class="form-select" required></select></div>
+<div class="col-md-2"><label for="value" class="form-label">Значение</label><input id="value" type="number" step="any" class="form-control" required /></div>
+<div class="col-md-3"><label for="source" class="form-label">Источник</label><input id="source" value="Оператор" maxlength="64" class="form-control" required /></div>
+<div class="col-md-3 d-flex align-items-end"><button id="submit" class="btn btn-primary" disabled>Отправить</button></div>
+</form><p id="accepted" role="status"></p>
+<h2 class="h4">Журнал показаний</h2><p>Имитатор добавляет показания каждые 5 секунд. Показаны последние 50 замеров выбранного участка.</p>
+<div class="table-responsive"><table class="table"><thead><tr><th>Время</th><th>Датчик</th><th>Значение</th><th>Источник</th><th>Состояние</th></tr></thead><tbody id="readings"></tbody></table></div>
+</div>
+@section Scripts {
+<script src="~/vendor/signalr/signalr.min.js"></script>
+<script src="~/js/monitoring.js" asp-append-version="true"></script>
+}
